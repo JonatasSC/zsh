@@ -30,4 +30,13 @@ zvm_after_init() {
   # Up/Down -> history search by substring (^[[A/^[[B are up/down arrow escape codes)
   bindkey '^[[A' history-substring-search-up
   bindkey '^[[B' history-substring-search-down
-}
+
+  # Alt+Backspace -> delete word (prevents switching to normal mode)
+  bindkey -M viins '^[^?' backward-kill-word
+  bindkey -M viins '^[^H' backward-kill-word
+  bindkey -M viins '^H' backward-kill-word
+
+  # Ensure Ctrl+U and Ctrl+W work as expected in insert mode
+  bindkey -M viins '^U' backward-kill-line
+  bindkey -M viins '^W' backward-kill-word
+  }
