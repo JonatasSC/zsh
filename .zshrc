@@ -29,6 +29,8 @@ setopt HIST_FIND_NO_DUPS
 # Shell behaviour
 # =========================================================
 
+export SHORT_HOST=${HOST%%.*}
+
 setopt AUTOCD
 setopt NOBEEP
 setopt NUMERIC_GLOB_SORT  # sort file10 after file9, not after file1
@@ -101,6 +103,9 @@ source "$ZDOTDIR/aliases.zsh"
 
 # Custom keybindings
 source "$ZDOTDIR/bindings.zsh"
+
+# Load local overrides (not tracked by git)
+[[ -f "$ZDOTDIR/local.zsh" ]] && source "$ZDOTDIR/local.zsh"
 
 # Plugins and plugin manager
 source "$ZDOTDIR/plugins.zsh"

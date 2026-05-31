@@ -59,3 +59,12 @@ alias dotfiles='git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
 # =========================================================
 
 alias stream='mpv av://v4l2:/dev/video4 --fullscreen --demuxer-lavf-o=input_format=mjpeg,framerate=30 --profile=low-latency --untimed'
+
+# Auto ls after cd
+autoload -Uz add-zsh-hook
+_chpwd_ls() {
+    emulate -L zsh
+    # Only run ls if it's an interactive shell
+    [[ -o interactive ]] && ls
+}
+add-zsh-hook chpwd _chpwd_ls
