@@ -34,11 +34,27 @@ setopt NOBEEP
 setopt NUMERIC_GLOB_SORT  # sort file10 after file9, not after file1
 
 # =========================================================
+# SSH Agent
+# =========================================================
+
+if ! pgrep -u "$USER" ssh-agent > /dev/null; then
+    ssh-agent -s > "$XDG_STATE_HOME/zsh/ssh-agent.env"
+fi
+if [[ ! -f "$SSH_AUTH_SOCK" ]]; then
+    source "$XDG_STATE_HOME/zsh/ssh-agent.env" > /dev/null
+fi
+
+# Load local overrides (not tracked by git)
+[[ -f "$ZDOTDIR/local.zsh" ]] && source "$ZDOTDIR/local.zsh"
+
+# =========================================================
 # Smart directory navigation & lf
 # =========================================================
 
-LF_ICONS=$(cat ~/.config/lf/icons | tr '\n' ':')
-export LF_ICONS
+if [[ -f ~/.config/lf/icons ]]; then
+    LF_ICONS=$(cat ~/.config/lf/icons | tr '\n' ':')
+    export LF_ICONS
+fi
 
 # Initialize zoxide
 eval "$(zoxide init zsh)"
