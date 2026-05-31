@@ -64,7 +64,9 @@ alias stream='mpv av://v4l2:/dev/video4 --fullscreen --demuxer-lavf-o=input_form
 autoload -Uz add-zsh-hook
 _chpwd_ls() {
     emulate -L zsh
+
     # Only run ls if it's an interactive shell and not in a subshell
     [[ -o interactive ]] && ll
+
 }
 add-zsh-hook chpwd _chpwd_ls
