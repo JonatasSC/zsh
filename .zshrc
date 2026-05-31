@@ -37,8 +37,9 @@ setopt NUMERIC_GLOB_SORT  # sort file10 after file9, not after file1
 # Smart directory navigation & lf
 # =========================================================
 
-LF_ICONS=$(cat ~/.config/lf/icons | tr '\n' ':')
-export LF_ICONS
+if [[ -f "$HOME/.config/lf/icons" ]]; then
+    export LF_ICONS=$(cat "$HOME/.config/lf/icons" | tr '\n' ':')
+fi
 
 # Initialize zoxide
 eval "$(zoxide init zsh)"
