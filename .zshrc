@@ -36,20 +36,6 @@ setopt NOBEEP
 setopt NUMERIC_GLOB_SORT  # sort file10 after file9, not after file1
 
 # =========================================================
-# SSH Agent
-# =========================================================
-
-if ! pgrep -u "$USER" ssh-agent > /dev/null; then
-    ssh-agent -s > "$XDG_STATE_HOME/zsh/ssh-agent.env"
-fi
-if [[ ! -f "$SSH_AUTH_SOCK" ]]; then
-    source "$XDG_STATE_HOME/zsh/ssh-agent.env" > /dev/null
-fi
-
-# Load local overrides (not tracked by git)
-[[ -f "$ZDOTDIR/local.zsh" ]] && source "$ZDOTDIR/local.zsh"
-
-# =========================================================
 # Smart directory navigation & lf
 # =========================================================
 
@@ -67,8 +53,16 @@ eval "$(zoxide init zsh)"
 # Load completion system
 autoload -Uz compinit
 
-# Initialize completion with cached metadata file
-compinit -d "$XDG_CACHE_HOME/zsh/zcompdump"
+# Cached completion: regenerate the dump file at most once every 24h.
+# Skips the slow security check on warm starts via `compinit -C`.
+zcompdump="$XDG_CACHE_HOME/zsh/zcompdump"
+[[ -d "${zcompdump:h}" ]] || mkdir -p "${zcompdump:h}"
+if [[ -f $zcompdump && -z $zcompdump(#qN.mh+24) ]]; then
+  compinit -C -d "$zcompdump"
+else
+  compinit -d "$zcompdump"
+fi
+unset zcompdump
 
 # Enable interactive completion menu selection
 zstyle ':completion:*' menu select
